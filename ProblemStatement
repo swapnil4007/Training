@@ -1,0 +1,23 @@
+Problem Statement
+
+Create a Spring application for a Library Management System.
+
+A library allows users to borrow books, and the borrowing process depends on a Notification Service to inform the user.
+
+Requirements
+
+Create an interface NotificationService.
+
+Create an implementation class EmailNotificationService.
+
+Create a class LibraryService.
+
+LibraryService should depend on NotificationService.
+
+Use Spring Dependency Injection to inject the dependency.
+
+When a book is borrowed, a notification should be sent to the user.
+
+Expected Output
+Book borrowed successfully
+Notification sent via Email 
