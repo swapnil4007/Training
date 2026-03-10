@@ -21,3 +21,26 @@ When a book is borrowed, a notification should be sent to the user.
 Expected Output
 Book borrowed successfully
 Notification sent via Email 
+
+
+
+
+Problem 2 Spring
+
+Create the Order domain class.
+
+Create the PaymentService interface.
+
+Implement the interface in CardPaymentService.
+
+Create OrderService which uses PaymentService.
+
+Use Constructor Injection to inject the dependency.
+
+Process an order and print payment confirmation.
+
+Expected Output
+Order placed successfully
+Product: Laptop
+Amount: 50000
+Payment done using Card
