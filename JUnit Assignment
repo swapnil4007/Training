@@ -1,0 +1,189 @@
+JUnit Testing Scenario
+
+Problem Statement
+You are required to develop and test a simple Java-based Banking Application using JUnit 5. The goal is to understand and implement the JUnit Test Lifecycle annotations effectively.
+________________________________________ 
+Application Description
+Create a class:
+BankAccount
+This class should simulate basic banking operations.
+ Attributes:
+•	accountHolderName (String)
+•	balance (double)
+ Methods:
+1.	deposit(double amount)
+→ Adds money to account
+2.	withdraw(double amount)
+→ Deducts money (should fail if insufficient balance)
+3.	getBalance()
+→ Returns current balance
+4.	resetAccount()
+→ Resets balance to 0
+________________________________________
+Testing Requirements (JUnit Lifecycle)
+Create a test class:
+BankAccountTest
+Use the following JUnit lifecycle annotations:
+ 1. @BeforeAll
+•	Initialize shared resources (e.g., test data setup)
+•	Print: "Before All Tests Executed"
+2. @BeforeEach
+•	Create a new BankAccount object before every test
+•	Initialize with default balance (e.g., ₹1000)
+3. @Test
+Write test cases for:
+•	Deposit functionality
+•	Withdraw functionality (valid case)
+•	Withdraw with insufficient balance (exception case)
+•	Get balance
+•	Reset account
+4. @AfterEach
+•	Clean up or reset test object
+•	Print: "Test Completed"
+5. @AfterAll
+•	Release resources
+•	Print: "All Tests Completed"
+________________________________________
+Additional Conditions
+•	Use assertions like:
+o	assertEquals
+o	assertThrows
+o	assertTrue
+•	Handle invalid inputs:
+o	Negative deposit
+o	Over-withdrawal
+________________________________________
+Expected Learning Outcomes
+After completing this assignment, you should be able to:
+•	Understand JUnit 5 lifecycle annotations
+•	Write structured unit tests
+•	Handle setup & teardown efficiently
+•	Test both positive and negative scenarios
+
+
+Solution :
+
+package com.msedcl.main.bank;
+
+public class BankAccount {
+	private String accountHolderName;
+	private double balance;
+
+	public BankAccount(String accountHolderName, double balance) {
+		super();
+		this.accountHolderName = accountHolderName;
+		this.balance = balance;
+	}
+
+	public void deposit(double amount) {
+		if (amount < 0) {
+			throw new IllegalArgumentException("Deposit amount must be positive");
+		}
+		balance += amount;
+	}
+
+	public void withdraw(double amount) {
+		if (amount <= 0) {
+			throw new IllegalArgumentException("withdraw amount must be positive");
+		}
+		if (amount > balance) {
+			throw new RuntimeException("Insufficient Balance");
+		}
+		balance -= amount;
+	}
+	
+	public double getBalance() {
+		return balance;
+	}
+	
+	public void resetAccount() {
+		balance = 0;
+	}
+
+}
+
+++++++++++++++++++++++++++++++++++++++++
+package com.msedcl.main.bank;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+public class BankAccountTest {
+	private BankAccount account;
+
+	@BeforeAll
+	static void beforeAll() {
+		System.out.println("Before all tests executed ");
+	}
+
+	@BeforeEach
+	void setUp() {
+		account = new BankAccount("Laxman", 1000);
+		System.out.println("New bankaccount created with balance 1000");
+	}
+
+	@DisplayName("Test Deposit")
+	@Test
+	void testDeposit() {
+		account.deposit(500);
+		assertEquals(1500, account.getBalance());
+	}
+
+	@DisplayName("Test Withdraw")
+	@Test
+	void testWithdraw() {
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			account.withdraw(2000);
+		});
+
+		assertEquals("Insufficient Balance", exception.getMessage());
+	}
+
+	// Test get balance
+	@Test
+	@DisplayName("Test Get Balance")
+	void testGetBalance() {
+		assertEquals(1000, account.getBalance());
+	}
+
+	// Test reset account
+	@Test
+	@DisplayName("Test Reset Account")
+	void testResetAccount() {
+		account.resetAccount();
+		assertEquals(0, account.getBalance());
+	}
+
+	// Negative deposit test
+	@Test
+	@DisplayName("Test Negative Deposit")
+	void testNegativeDeposit() {
+		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+			account.deposit(-100);
+		});
+
+		assertEquals("Deposit amount must be positive", exception.getMessage());
+	}
+
+	// Runs after each test
+	@AfterEach
+	void tearDown() {
+		System.out.println("Test Completed");
+	}
+
+	// Runs once after all tests
+	@AfterAll
+	static void afterAll() {
+		System.out.println("All Tests Completed");
+	}
+
+}
+
+
